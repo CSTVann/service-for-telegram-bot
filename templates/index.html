@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Upload and Processing</title>
+    </head>
+    <body>
+        <h1>Image Upload and Processing</h1>
+        <input type="file" id="fileInput" multiple accept="image/*">
+        <button onclick="uploadFiles()">Upload and Process</button>
+        <div id="status"></div>
+
+        <script>
+            async function uploadFiles() {
+                const fileInput = document.getElementById('fileInput');
+                const status = document.getElementById('status');
+                const files = fileInput.files;
+
+                if (files.length === 0) {
+                    status.textContent = 'Please select at least one file.';
+                    return;
+                }
+
+                status.textContent = 'Uploading files...';
+
+                for (let i = 0; i < files.length; i++) {
+                    const formData = new FormData();
+                    formData.append('file', files[i]);
+
+                    try {
+                        const response = await fetch('/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            status.textContent += `\nFile ${i + 1} uploaded successfully.`;
+                        } else {
+                            status.textContent += `\nError uploading file ${i + 1}.`;
+                        }
+                    } catch (error) {
+                        status.textContent += `\nError uploading file ${i + 1}: ${error}`;
+                    }
+                }
+
+                status.textContent += '\nAll files uploaded. Processing in the background.';
+            }
+        </script>
+    </body>
+</html>

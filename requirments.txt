@@ -1,0 +1,4 @@
+tensorflow==2.0.0  # Or specify your desired version
+Pillow
+flask
+flask-mysql
